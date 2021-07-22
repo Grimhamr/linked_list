@@ -49,6 +49,7 @@ class LinkedList
     
     def change_node(new_node,old_node)
         old_node.next_node = new_node
+        new_node.index = old_node.index + 1
         @last_node = new_node
     end
 
@@ -57,10 +58,11 @@ class LinkedList
         
         
         if @start == nil
+            new_node.index = 0
             @start=new_node
             @last_node = new_node
         else
-            #make new_node the next_node of @start. make method? at node?
+         
 
             change_node(new_node,@last_node)
         end
@@ -71,9 +73,9 @@ class LinkedList
 
     def prepend(value)
         new_node = Node.new(value,@end)
-
+        new_node.index = 0
         if @start == nil
-            p"1"
+            
             @start=new_node
             @last_node = new_node
         else
@@ -81,7 +83,22 @@ class LinkedList
             new_node.next_node=@start
             @start=new_node
         end
+        
         @size += 1
+
+        index_reset(new_node)
+    end
+
+    def index_reset(new_node)
+        unless new_node.next_node == nil || new_node.next_node.index == nil 
+        
+        new_node.next_node.index = new_node.index + 1
+        p "#{new_node.next_node.value} index set to  #{new_node.next_node.index}"
+        index_reset(new_node.next_node)
+        else
+            return
+        end
+        
     end
 
     def size
@@ -90,6 +107,19 @@ class LinkedList
 
     def start
         p @start
+    end
+
+    def end
+        p @last_node
+    end
+
+    def at(index, node = @start)
+        if node.index == index
+            p node
+            return node
+        else
+            at(index,node.next_node)
+        end
     end
 end
 
@@ -113,5 +143,10 @@ linked_list.start
 linked_list.append("last node")
 p linked_list
 linked_list.size
+
+p "index test"
+linked_list.at(0)
+
+
 
 
