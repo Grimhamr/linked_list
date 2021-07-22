@@ -41,10 +41,10 @@ require_relative "node"
 
 class LinkedList
     
-
     def initialize
         @start = nil
         @end = nil
+        @size = 0
     end
     
     def change_node(new_node,old_node)
@@ -54,7 +54,7 @@ class LinkedList
 
     def append(value)
         new_node = Node.new(value,@end)
-        p "created new node"
+        
         
         if @start == nil
             @start=new_node
@@ -64,12 +64,33 @@ class LinkedList
 
             change_node(new_node,@last_node)
         end
+        p "appended new node"
+        @size += 1
     end
     
 
     def prepend(value)
+        new_node = Node.new(value,@end)
+
+        if @start == nil
+            p"1"
+            @start=new_node
+            @last_node = new_node
+        else
+            p"2"
+            new_node.next_node=@start
+            @start=new_node
+        end
+        @size += 1
     end
 
+    def size
+        puts "list size: #{@size}"
+    end
+
+    def start
+        p @start
+    end
 end
 
     
@@ -77,14 +98,20 @@ end
 linked_list= LinkedList.new
 p "pre append:"
 p linked_list
-linked_list.append("first node")
-p "after appending:"
+linked_list.prepend("first node")
+linked_list.size
+linked_list.start
 p linked_list
 linked_list.append("second node")
+
 p linked_list
 linked_list.append("third node")
-linked_list.append("fourthnode")
-linked_list.append("LASTNODE")
+
+linked_list.prepend("new first node")
+linked_list.size
+linked_list.start
+linked_list.append("last node")
 p linked_list
+linked_list.size
 
 
