@@ -20,23 +20,8 @@ Extra Credit
 #insert_at(value, index) that inserts a new node with the provided value at the given index.
 #remove_at(index) that removes the node at the given index.
 Extra Credit Tip: When you insert or remove a node, consider how it will affect the existing nodes. Some of the nodes will need their #next_node link updated.
-
-list
-contains:
-    start
-        denotes start
-    item
-        each item leads to the next
-        contains a name(?) and information
-    end
-        denotes end
-
-
-
-actions
-    create start and end
-    create #append
 =end
+
 require_relative "node"
 
 class LinkedList
@@ -62,15 +47,12 @@ class LinkedList
             @start=new_node
             @last_node = new_node
         else
-         
-
             change_node(new_node,@last_node)
         end
-        p "appended new node"
+      
         @size += 1
     end
     
-
     def prepend(value)
         new_node = Node.new(value,@end)
         new_node.index = 0
@@ -79,13 +61,11 @@ class LinkedList
             @start=new_node
             @last_node = new_node
         else
-            p"2"
             new_node.next_node=@start
             @start=new_node
         end
         
         @size += 1
-
         index_reset(new_node)
     end
 
@@ -98,7 +78,6 @@ class LinkedList
         else
             return
         end
-        
     end
 
     def size
@@ -115,7 +94,6 @@ class LinkedList
 
     def at(index, node = @start)
         if node.index == index
-            p node
             return node
         else
             at(index,node.next_node)
@@ -124,27 +102,42 @@ class LinkedList
 
     def pop(node = @start)
         if node == nil
-            p "nil found, returning"
             return self
         elsif node.next_node == nil
-            p "next node found nonexistend. we currently at #{node.value}. deleting it"
+         
             node.value = nil
             node.index = nil
             node.next_node = nil
             node = nil
-            p "node is now: #{node}"
-            p "is nil? #{node.nil?}"
+        
             return self
         else
-            p "#{node.value} not valid for poppin. moving on"
             pop(node.next_node)
         end
     end
 
-    def contains?
+    def contains?(value, node = @start)
+        if node.value == value
+            true
+        else
+            if node.next_node.nil?
+                return false 
+            end
+            contains?(value, node.next_node)
+        end
 
     end
 
+    def find(value, node = @start)
+        if node.value == value
+            node.index
+        else
+            if node.next_node.nil?
+                return nil 
+            end
+            find(value, node.next_node)
+        end
+    end
 
     def to_s(node = @start)
         p node.value
@@ -154,13 +147,12 @@ class LinkedList
             
             to_s(node.next_node)
         else
-           @list_string = @list_string+"end"
+           @list_string = @list_string+" -> end"
         end
         puts @list_string
     end
 
-        
-    
+ 
 end
 
     
@@ -187,10 +179,19 @@ linked_list.size
 p "index test"
 linked_list.at(0)
 p "POPPPIN"
-linked_list.pop
+#linked_list.pop
 p "popped"
 
 p linked_list
 p linked_list.last_node
 p "to s"
 linked_list.to_s
+
+p "contains"
+p linked_list.contains?("one hundredth node")
+p linked_list.contains?("third node")
+p "find"
+p linked_list.find("one hundredth node")
+p linked_list.find("third node")
+
+linked_list.insert_at(2,"interjected node")
