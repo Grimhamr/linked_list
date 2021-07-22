@@ -40,7 +40,7 @@ actions
 require_relative "node"
 
 class LinkedList
-    
+    attr_accessor :last_node
     def initialize
         @start = nil
         @end = nil
@@ -106,11 +106,11 @@ class LinkedList
     end
 
     def start
-        p @start
+        @start
     end
 
     def end
-        p @last_node
+        @last_node
     end
 
     def at(index, node = @start)
@@ -121,6 +121,46 @@ class LinkedList
             at(index,node.next_node)
         end
     end
+
+    def pop(node = @start)
+        if node == nil
+            p "nil found, returning"
+            return self
+        elsif node.next_node == nil
+            p "next node found nonexistend. we currently at #{node.value}. deleting it"
+            node.value = nil
+            node.index = nil
+            node.next_node = nil
+            node = nil
+            p "node is now: #{node}"
+            p "is nil? #{node.nil?}"
+            return self
+        else
+            p "#{node.value} not valid for poppin. moving on"
+            pop(node.next_node)
+        end
+    end
+
+    def contains?
+
+    end
+
+
+    def to_s(node = @start)
+        p node.value
+        @list_string = @list_string.to_s + "#{node.value}"
+        if !node.next_node.nil?
+            @list_string = @list_string + " -> "
+            
+            to_s(node.next_node)
+        else
+           @list_string = @list_string+"end"
+        end
+        puts @list_string
+    end
+
+        
+    
 end
 
     
@@ -140,13 +180,17 @@ linked_list.append("third node")
 linked_list.prepend("new first node")
 linked_list.size
 linked_list.start
-linked_list.append("last node")
+linked_list.append("fourth node")
 p linked_list
 linked_list.size
 
 p "index test"
 linked_list.at(0)
+p "POPPPIN"
+linked_list.pop
+p "popped"
 
-
-
-
+p linked_list
+p linked_list.last_node
+p "to s"
+linked_list.to_s
